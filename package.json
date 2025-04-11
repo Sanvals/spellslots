@@ -2,11 +2,11 @@
   "name": "spellslots",
   "private": true,
   "version": "0.1.0",
-  "homepage": "https://sanvals.github.io/spellslots",
+  "homepage": "https://sanvals.github.io/spellslots/",
   "type": "module",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
