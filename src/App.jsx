@@ -3,19 +3,38 @@ import starEmpty from './assets/star-empty.png'
 import starFull from './assets/star-full.png'
 import starFocus from './assets/star-focus.png'
 import starCharges from './assets/star-charges.png'
+import starBlind from './assets/star-blind.png'
+import n1 from './assets/1.png'
+import n2 from './assets/2.png'
+import n3 from './assets/3.png'
+import n4 from './assets/4.png'
+import n5 from './assets/5.png'
+import imageStaff from './assets/staff.png'
+import imageWeapon from './assets/weapon.png'
 import './App.css'
 
-const starImages = {
-  spell: starFull,
-  focus: starFocus,
-  staff: starCharges,
+const star = {
+  images: {
+    spell: starFull,
+    focus: starFocus,
+    staff: starCharges
+  },
+  colors: {
+    spell: '#f8c82b',
+    focus: '#9262c9',
+    staff: '#04cb0c',
+  }
 }
 
-const starColors = {
-  spell: '#f8c82b',
-  focus: '#9262c9',
-  staff: '#04cb0c',
-};
+const rangeLogos = {
+  R1: n1,
+  R2: n2,
+  R3: n3,
+  R4: n4,
+  R5: n5,
+  Staff: imageStaff,
+  Focus: imageWeapon
+}
 
 function Star ({ type }) {
   const  [isFull, setIsFull] = useState(true)
@@ -24,7 +43,7 @@ function Star ({ type }) {
     <div className="star-wrapper">
       <img
         className="star"
-        src={ isFull ? starImages[type] : starEmpty }
+        src={ isFull ? star.images[type] : starEmpty }
         alt={ type }
         onClick={ () => setIsFull(!isFull) }
       />
@@ -33,13 +52,18 @@ function Star ({ type }) {
 }
 
 function SpellRange({ name, slots, type }) {
+  let rangeLogo = null
+  if (name == "R1") rangeLogo = n1
   return (
     <div className="range">
-      <span style={{ color: starColors[type] }}>{name}</span>
+      <img className="rangeLogo" src={rangeLogos[name]}></img>
       <div className="slots-range">
-        {Array.from({ length: Number(slots) }).map((_, i) => (
-          <Star key={i} type={type} />
-      ))}
+        {
+          Array.from({ length: Number(slots) }).map((_, i) => (
+            <Star key={i} type={type} />
+            )
+          )
+        }
       </div>
     </div>
   );
