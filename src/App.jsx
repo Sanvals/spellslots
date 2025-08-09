@@ -113,6 +113,7 @@ function App() {
     { name: 'R2', slots: 3, type: 'spell' },
     { name: 'R3', slots: 3, type: 'spell' },
     { name: 'R4', slots: 3, type: 'spell' },
+    // Increasing spell slots
     { name: 'R5', slots: 3, type: 'spell' },
     { name: 'Staff', slots: 5, type: 'staff' },
     { name: 'Focus', slots: 4, type: 'focus' },
