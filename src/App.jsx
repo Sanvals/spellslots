@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import starEmpty from './assets/star-empty.png'
 import starFull from './assets/star-full.png'
 import starFocus from './assets/star-focus.png'
@@ -36,38 +36,76 @@ const rangeLogos = {
   Focus: imageWeapon
 }
 
-function Star ({ type }) {
-  const  [isFull, setIsFull] = useState(true)
-
+function Star ({ type, isFull, toggle }) {
   return (
     <div className="star-wrapper">
       <img
         className="star"
         src={ isFull ? star.images[type] : starEmpty }
         alt={ type }
-        onClick={ () => setIsFull(!isFull) }
+        onClick={ toggle }
       />
     </div>
-  )
+  );
 }
 
+
 function SpellRange({ name, slots, type }) {
-  let rangeLogo = null
-  if (name == "R1") rangeLogo = n1
+  const storageKey = `spell-range-${name}`;
+  const [stars, setStars] = useState(() => {
+    const saved = localStorage.getItem(storageKey);
+    return saved ? JSON.parse(saved) : Array(Number(slots)).fill(true);
+  });
+
+  const toggleStar = (index) => {
+    setStars(prev =>
+      prev.map((val, i) => (i === index ? !val : val))
+    );
+  };
+
+  const resetStars = () => {
+    setStars(Array(Number(slots)).fill(true));
+  };
+
+  const allEmpty = stars.every(s => !s);
+
+  useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(stars));
+  }, [stars]);
+
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "r" || e.key === "R") {
+        resetStars();
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
   return (
     <div className="range">
-      <img className="rangeLogo" src={rangeLogos[name]}></img>
+      <img
+        className="rangeLogo"
+        src={rangeLogos[name]}
+        style={{ opacity: allEmpty ? 0.5 : 1 }}
+      />
       <div className="slots-range">
         {
-          Array.from({ length: Number(slots) }).map((_, i) => (
-            <Star key={i} type={type} />
-            )
-          )
+          stars.map((isFull, i) => (
+            <Star
+              key={i}
+              type={type}
+              isFull={isFull}
+              toggle={() => toggleStar(i)}
+            />
+          ))
         }
       </div>
     </div>
   );
 }
+
 
 function App() {
   const spellGroups = [
@@ -75,7 +113,7 @@ function App() {
     { name: 'R2', slots: 3, type: 'spell' },
     { name: 'R3', slots: 3, type: 'spell' },
     { name: 'R4', slots: 3, type: 'spell' },
-    { name: 'R5', slots: 2, type: 'spell' },
+    { name: 'R5', slots: 3, type: 'spell' },
     { name: 'Staff', slots: 5, type: 'staff' },
     { name: 'Focus', slots: 4, type: 'focus' },
   ];
